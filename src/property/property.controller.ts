@@ -5,10 +5,16 @@ import {
   Param,
   ParseBoolPipe,
   ParseIntPipe,
+  Patch,
   Post,
-  Put,
+  //   Put,
   Query,
+  //   UsePipes,
+  //   ValidationPipe,
 } from '@nestjs/common';
+import { CreatePropertyDto } from './dto/createProperty.dto';
+// import { idParamDto } from './dto/idParam.dto';
+import { ParseIdPipe } from './pipes/parseIdPipe';
 
 @Controller('property')
 export class PropertyController {
@@ -35,13 +41,35 @@ export class PropertyController {
     return `id = ${id} and slug =${slug}`;
   }
 
+  //   @Post()
+  //   @UsePipes(
+  //     new ValidationPipe({
+  //       whitelist: true,
+  //       forbidNonWhitelisted: false,
+  //       groups: ['create'],
+  //       always: true,
+  //     }),
+  //   )
+  //   create(@Body() createPropertyDto: CreatePropertyDto) {
+  //     return createPropertyDto;
+  //   }
+
   @Post()
-  create(@Body() body: { name: string; type: string }) {
+  create(@Body() createPropertyDto: CreatePropertyDto) {
+    return createPropertyDto;
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIdPipe) id,
+    @Body()
+    body: CreatePropertyDto,
+  ) {
     return body;
   }
 
-  @Put(':id')
-  update(@Param('id') id: string) {
-    return `This will update a property with id:${id}`;
-  }
+  //   @Put(':id')
+  //   update(@Param('id') id: string) {
+  //     return `This will update a property with id:${id}`;
+  //   }
 }
