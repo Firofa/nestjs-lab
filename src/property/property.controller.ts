@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   ParseBoolPipe,
   ParseIntPipe,
@@ -15,6 +16,8 @@ import {
 import { CreatePropertyDto } from './dto/createProperty.dto';
 // import { idParamDto } from './dto/idParam.dto';
 import { ParseIdPipe } from './pipes/parseIdPipe';
+import { HeaderDto } from './dto/headers.dto';
+import { RequestHeader } from './pipes/request-header';
 
 @Controller('property')
 export class PropertyController {
@@ -61,11 +64,14 @@ export class PropertyController {
 
   @Patch(':id')
   update(
-    @Param('id', ParseIdPipe) id,
-    @Body()
-    body: CreatePropertyDto,
+    @Param('id', ParseIdPipe) id: string,
+    @Body() body: CreatePropertyDto,
+    @RequestHeader(HeaderDto) header: HeaderDto,
   ) {
-    return body;
+    return {
+      message: 'Header valid',
+      header,
+    };
   }
 
   //   @Put(':id')
