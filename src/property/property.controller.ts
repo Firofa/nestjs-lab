@@ -1,24 +1,22 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  Headers,
   Param,
-  ParseBoolPipe,
   ParseIntPipe,
   Patch,
   Post,
   //   Put,
-  Query,
+  // Query,
   //   UsePipes,
   //   ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createProperty.dto';
 // import { idParamDto } from './dto/idParam.dto';
 import { ParseIdPipe } from './pipes/parseIdPipe';
-import { HeaderDto } from './dto/headers.dto';
-import { RequestHeader } from './pipes/request-header';
 import { PropertyService } from './property.service';
+import { UpdatePropertyDto } from './dto/updateProperty.dto';
 
 @Controller('property')
 export class PropertyController {
@@ -33,11 +31,8 @@ export class PropertyController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id', ParseIntPipe) id: string,
-    @Query('sort', ParseBoolPipe) sort,
-  ): any {
-    return this.propertyService.findOne();
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.propertyService.findOne(id);
   }
 
   @Get(':id/:slug')
@@ -62,17 +57,21 @@ export class PropertyController {
   //   }
 
   @Post()
-  create(@Body() createPropertyDto: CreatePropertyDto) {
-    return this.propertyService.create();
+  create(@Body() dto: CreatePropertyDto) {
+    return this.propertyService.create(dto);
   }
 
   @Patch(':id')
   update(
-    @Param('id', ParseIdPipe) id: string,
-    @Body() body: CreatePropertyDto,
-    @RequestHeader(HeaderDto) header: HeaderDto,
+    @Param('id', ParseIdPipe) id: number,
+    @Body() body: UpdatePropertyDto,
   ) {
-    return this.propertyService.update();
+    return this.propertyService.update(id, body);
+  }
+
+  @Delete(':id')
+  delete(@Param('id', ParseIdPipe) id: number) {
+    return this.propertyService.delete(id);
   }
 
   //   @Put(':id')
