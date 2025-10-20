@@ -18,22 +18,26 @@ import { CreatePropertyDto } from './dto/createProperty.dto';
 import { ParseIdPipe } from './pipes/parseIdPipe';
 import { HeaderDto } from './dto/headers.dto';
 import { RequestHeader } from './pipes/request-header';
+import { PropertyService } from './property.service';
 
 @Controller('property')
 export class PropertyController {
+  constructor(private propertyService: PropertyService) {
+    // Don't create your dependency, instead use Dependency Injection in NestJS
+    // this.propertyService = new PropertyService();
+  }
+
   @Get()
-  findAll(): string {
-    return 'All Properties';
+  findAll(): any {
+    return this.propertyService.findAll();
   }
 
   @Get(':id')
   findOne(
     @Param('id', ParseIntPipe) id: string,
     @Query('sort', ParseBoolPipe) sort,
-  ): string {
-    console.log(`Property with ID: ${id}`);
-    console.log(`Propery of 'sort' ${sort}`);
-    return '';
+  ): any {
+    return this.propertyService.findOne();
   }
 
   @Get(':id/:slug')
@@ -59,7 +63,7 @@ export class PropertyController {
 
   @Post()
   create(@Body() createPropertyDto: CreatePropertyDto) {
-    return createPropertyDto;
+    return this.propertyService.create();
   }
 
   @Patch(':id')
@@ -68,10 +72,7 @@ export class PropertyController {
     @Body() body: CreatePropertyDto,
     @RequestHeader(HeaderDto) header: HeaderDto,
   ) {
-    return {
-      message: 'Header valid',
-      header,
-    };
+    return this.propertyService.update();
   }
 
   //   @Put(':id')
