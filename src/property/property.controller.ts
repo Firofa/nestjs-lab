@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   //   Put,
   // Query,
   //   UsePipes,
@@ -17,6 +18,7 @@ import { CreatePropertyDto } from './dto/createProperty.dto';
 import { ParseIdPipe } from './pipes/parseIdPipe';
 import { PropertyService } from './property.service';
 import { UpdatePropertyDto } from './dto/updateProperty.dto';
+import { PaginationDTO } from './dto/pagination.dto';
 
 @Controller('property')
 export class PropertyController {
@@ -26,8 +28,8 @@ export class PropertyController {
   }
 
   @Get()
-  findAll(): any {
-    return this.propertyService.findAll();
+  findAll(@Query() paginationDTO: PaginationDTO): any {
+    return this.propertyService.findAll(paginationDTO);
   }
 
   @Get(':id')
