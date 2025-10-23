@@ -7,6 +7,7 @@ import refreshJwtConfig from './config/refresh-jwt.config';
 import type { ConfigType } from '@nestjs/config';
 import * as argon2 from 'argon2';
 import { CurrentUser } from './types/current-user';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -98,5 +99,13 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('User not found!');
     const currentUser: CurrentUser = { id: user.id, role: user.role };
     return currentUser;
+  }
+
+  async validateGoogleUser(googleUser: CreateUserDto) {
+    const user = await this.UserService.findByEmail(googleUser.email);
+
+    if (user) return user;
+
+    return await this.UserService.create(googleUser);
   }
 }
