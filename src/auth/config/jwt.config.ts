@@ -11,7 +11,7 @@ export default registerAs('jwt', (): JwtModuleOptions => {
   return {
     secret,
     signOptions: {
-      expiresIn: '60s',
+      expiresIn: '15m',
     },
   };
 });

@@ -10,6 +10,6 @@ export default registerAs('refresh-jwt', (): JwtSignOptions => {
 
   return {
     secret,
-    expiresIn: '7d',
+    expiresIn: '1d',
   };
 });
