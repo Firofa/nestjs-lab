@@ -3,11 +3,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Request,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
+import { RefreshAuthGuard } from './guards/refresh-auth/refresh-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 
 // Buat interface untuk request dengan user
 interface RequestWithUser extends Request {
@@ -26,8 +28,19 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req: RequestWithUser) {
-    const token = this.authService.login(parseInt(req.user.id));
-    return { id: req.user.id, token };
+  login(@Req() req: RequestWithUser) {
+    return this.authService.login(parseInt(req.user.id));
+  }
+
+  @UseGuards(RefreshAuthGuard)
+  @Post('refresh')
+  refreshToken(@Req() req: RequestWithUser) {
+    return this.authService.refreshToken(parseInt(req.user.id));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('signout')
+  signOut(@Req() req: RequestWithUser) {
+    return this.authService.signOut(parseInt(req.user.id));
   }
 }
